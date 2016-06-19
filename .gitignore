@@ -29,5 +29,14 @@
 *.hex
 
 # Debug files
+debug
+Debug
 *.dSYM/
 *.su
+
+# Misc
+build
+Build
+*.swp
+*.DS_Store
+*.pyc
