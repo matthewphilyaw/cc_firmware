@@ -40,3 +40,4 @@ Debug
 *.DS_Store
 *.pyc
 bin
+build
