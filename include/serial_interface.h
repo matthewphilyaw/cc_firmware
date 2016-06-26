@@ -64,6 +64,7 @@ typedef struct {
   SerialResult_t (*SendString)(const char *source);                     /**< Send a string over the interface */
   SerialResult_t (*SendArray)(const uint8_t *source, uint32_t length);  /**< Send an array of bytes over the interface */
   int32_t (*GetByte)(uint8_t *destination, uint32_t length);                      /**< Retrieve one byte from the interface */
+  SerialResult_t (*GetLastError)(void);
 } SerialInterface;
 
 #endif
