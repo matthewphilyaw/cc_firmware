@@ -1,8 +1,8 @@
 /**
- * @file usart3.c
+ * @file usart2.c
  * @author Matthew Philyaw (matthew.philyaw@gmail.com)
  *
- * @brief USART Driver implementation for SerialPort3
+ * @brief USART Driver implementation for SerialPort2
  */
 #include "common.h"
 #include "mcu/usart2.h"
