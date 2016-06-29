@@ -17,6 +17,7 @@
 
 #define USART_OVER_SAMPLE_16
 #define FIFO_UINT8_T
+#define BAUDRATE 115200
 
 /**
  * @brief usart2 max buffer

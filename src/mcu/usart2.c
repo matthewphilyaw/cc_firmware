@@ -175,7 +175,7 @@ void USART2_IRQHandler() {
 }
 
 
-static int32_t GetByte(uint8_t *destination, uint32_t length) {
+static int32_t GetBytes(uint8_t *destination, uint32_t length) {
   if (!IsOpenFlag) {
     return SERIAL_CLOSED;
   }
@@ -270,6 +270,6 @@ SerialInterface SerialPort2 = {
   SendByte,
   SendString,
   SendArray,
-  GetByte,
+  GetBytes,
   GetLastError
 };
