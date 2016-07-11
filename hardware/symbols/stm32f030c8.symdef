@@ -2,7 +2,7 @@
 
 STM32F030C8
 refdes=U?
-! device=micro controller
+! device=MCU
 ! description=cortex m0
 ! footprint=LQFP48_12
 
