@@ -3,7 +3,7 @@ B 300 300 1200 600 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
 P 0 600 300 600 1 0 0
 {
 T 0 600 5 10 0 0 180 0 1
-pintype=pwr
+pintype=io
 T 330 570 9 8 1 1 0 0 1
 pinlabel=Vin
 T 205 645 5 8 1 1 0 6 1
@@ -14,7 +14,7 @@ pinseq=3
 P 900 0 900 300 1 0 0
 {
 T 900 0 5 10 0 0 180 0 1
-pintype=pwr
+pintype=io
 T 1070 475 9 8 1 1 180 0 1
 pinlabel=GND
 T 780 100 5 8 1 1 0 0 1
@@ -25,7 +25,7 @@ pinseq=1
 P 1800 600 1500 600 1 0 0
 {
 T 1800 600 5 10 0 0 180 0 1
-pintype=pwr
+pintype=io
 T 1445 570 9 8 1 1 0 6 1
 pinlabel=Vout
 T 1595 645 5 8 1 1 0 0 1
