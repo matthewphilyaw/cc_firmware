@@ -749,6 +749,8 @@ C 24200 46000 1 0 0 usb-minib.sym
 {
 T 24300 48300 5 10 1 1 0 0 1
 refdes=CONN2
+T 24200 46000 5 10 0 0 0 0 1
+footprint=micro-usb
 }
 C 26600 45600 1 0 0 gnd-1.sym
 N 26400 48000 29500 48000 4
@@ -1169,6 +1171,8 @@ T 33100 43300 5 10 1 1 0 0 1
 refdes=S1
 T 33100 43600 5 10 0 0 0 0 1
 device=SWITCH_PUSHBUTTON_NO
+T 32700 43000 5 10 0 0 0 0 1
+footprint=micro-pushbutton
 }
 C 32800 42100 1 0 0 capacitor-1.sym
 {
