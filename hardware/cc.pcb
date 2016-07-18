@@ -9,7 +9,7 @@ Grid[500.000000 0.0000 0.0000 0]
 PolyArea[200000000.000000]
 Thermal[0.500000]
 DRC[5.00mil 5.00mil 5.00mil 4.00mil 10.00mil 4.00mil]
-Flags("showdrc,nameonpcb,clearnew,showmask")
+Flags("showdrc,nameonpcb,clearnew")
 Groups("1,c:2:3:4,s:5")
 Styles["Signal,10.00mil,28.00mil,14.00mil,10.00mil:Power,20.00mil,40.00mil,20.00mil,10.00mil:Fat,40.00mil,60.00mil,35.00mil,10.00mil:Skinny,6.00mil,24.02mil,11.81mil,6.00mil"]
 
@@ -1533,6 +1533,10 @@ Layer(2 "ground")
 )
 Layer(3 "power")
 (
+	Polygon("clearpoly")
+	(
+		[40.00mil 35.00mil] [1520.00mil 35.00mil] [1520.00mil 1515.00mil] [40.00mil 1515.00mil] 
+	)
 )
 Layer(4 "bottom")
 (
@@ -1623,7 +1627,7 @@ Layer(4 "bottom")
 Layer(5 "outline")
 (
 	Line[10.00mil 1550.00mil 10.00mil 10.00mil 20.00mil 20.00mil "clearline"]
-	Line[1550.00mil 10.00mil 1550.00mil 1550.00mil 20.00mil 20.00mil "clearline,selected"]
+	Line[1550.00mil 10.00mil 1550.00mil 1550.00mil 20.00mil 20.00mil "clearline"]
 	Line[10.00mil 10.00mil 1550.00mil 10.00mil 20.00mil 20.00mil "clearline"]
 	Line[1550.00mil 1550.00mil 10.00mil 1550.00mil 20.00mil 20.00mil "clearline"]
 )
