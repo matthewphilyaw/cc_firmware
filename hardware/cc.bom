@@ -1,0 +1,22 @@
+refdes;value;mpn;documentation;digikey;device;footprint;qty
+U3;;STM32F030C8T6;STM32F030x4/6/8/C;http://www.digikey.com/scripts/DkSearch/dksus.dll?Detail&itemSeq=201629581&uq=636043779223700178;MCU;stm32f030c8;1
+SWD;;;;;CONNECTOR_6;JUMPER6;1
+R3,R4;10K;;;;RESISTOR;0805;2
+L2;10U;LQH31CN100K03L;http://www.digikey.com/scripts/DkSearch/dksus.dll?Detail&itemSeq=202199007&uq=636043779223720180;http://www.digikey.com/scripts/DkSearch/dksus.dll?Detail&itemSeq=202199007&uq=636043779223720180;INDUCTOR;1206;1
+USART_ADC;;;;;CONNECTOR_10;JUMPER10;1
+GPIO,SPI_I2C;;;;;CONNECTOR_12;JUMPER12;2
+CONN2;;10118194-0001LF;http://portal.fciconnect.com/Comergent//fci/drawing/10118194.pdf;http://www.digikey.com/scripts/DkSearch/dksus.dll?Detail&itemSeq=201629775&uq=636043779223710179;USB;micro-usb;1
+CONN1;;;;;CONNECTOR_2;JUMPER2;1
+D1,D2;;;;;DIODE;DO214AA;2
+U1;;MCP1700T-3302E/TT;http://www.microchip.com/mymicrochip/filehandler.aspx?ddocname=en011779;http://www.digikey.com/scripts/DkSearch/dksus.dll?Detail&itemSeq=201638529&uq=636043779223710179;LIN_VOLT_REG;sot23-1;1
+C3,C4;1U;;;;CAPACITOR;0805;2
+U4;;FOXSLF/080-20;http://www.foxonline.com/pdfs/hc49slf.pdf;http://www.digikey.com/scripts/DkSearch/dksus.dll?Detail&itemSeq=201629730&uq=636043779223700178;CRYSTAL;HC49;1
+C8,C9;20P;;;;CAPACITOR;0805;2
+U2;;FT230XQ-T;http://www.ftdichip.com/Support/Documents/DataSheets/ICs/DS_FT230X.pdf;http://www.digikey.com/scripts/DkSearch/dksus.dll?Detail&itemSeq=201635988&uq=636043779223710179;USB_TO_UART;QFN16_4_EP;1
+SB1,SB2,SB3;0;;;;RESISTOR;0201;3
+D3,D4,D5,D6,D7;;;;;LED;0603;5
+R1,R2,R5,R6,R7;267;;;;RESISTOR;0805;5
+L1;Ferrite Bead;742792605;http://katalog.we-online.de/pbs/datasheet/742792605.pdf;http://www.digikey.com/scripts/DkSearch/dksus.dll?Detail&itemSeq=202199042&uq=636043779223730181;INDUCTOR;0603;1
+C2;4.7U;;;;CAPACITOR;0805;1
+S1;;FSM2JSMAATR;http://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=2-1437565-7&DocType=Customer+Drawing&DocLang=English;http://www.digikey.com/scripts/DkSearch/dksus.dll?Detail&itemSeq=201629576&uq=636043779223700178;SWITCH_PUSHBUTTON_NO;micro-pushbutton;1
+C1,C5,C6,C7;0.1U;;;;CAPACITOR;0805;4
