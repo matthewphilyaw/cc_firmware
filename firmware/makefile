@@ -59,9 +59,9 @@ OUT_DIRS=$(subst /,/,$(sort $(dir $(OBJECTS))))
 DEFS=-DSTM32F030x8
 MCFLAGS=-mcpu=cortex-m0 -mthumb
 BASE_FLAGS=$(MCFLAGS) $(DEFS) $(INCLUDES)
-BASE_FLAGS+=-fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra -c -MMD -MP -MF$(@:.o=.d) -MT$(@)
+BASE_FLAGS+=-fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra -gdwarf-2 -c -MMD -MP -MF$(@:.o=.d) -MT$(@)
 CFLAGS= $(BASE_FLAGS) -std=gnu11
-CXXFLAGS=$(BASE_FLAGS) -std=c++11
+CXXFLAGS=$(BASE_FLAGS) -std=c++11 -pedantic-errors -fno-rtti -fno-threadsafe-statics
 LDSCRIPT=-T ./ldscripts/mem.ld -T ./ldscripts/libs.ld -T ./ldscripts/sections.ld -nostartfiles -Wl,-Map=$(OUTDIR)/output.map -Wl,-gc-sections --specs=nano.specs 
 LDFLAGS=$(LDSCRIPT) $(MCFLAGS) $(INCLUDES_LIBS) $(LINK_LIBS)
 
