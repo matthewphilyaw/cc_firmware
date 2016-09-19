@@ -4,12 +4,13 @@
 
 PROJECT=cc_firmware
 OUTDIR=build
-INCDIR=include system/include system/include/cmsis system/include/cmsis/device
+INCDIR=include system/include 
 SRCDIR=src system/src
 
 BINELF=$(PROJECT).elf
 BINHEX=$(PROJECT).hex
 BINARY=$(PROJECT).bin
+LISTING=$(PROJECT).lst
 
 #######################################################################
 #                                MISC                                 #
@@ -40,30 +41,32 @@ A2L=$(TOOL_ROOT)/arm-none-eabi-addr2line
 
 # find files
 INCLUDES=$(INCDIR:%=-I%)
-ASOURCES=$(shell find -L $(SRCDIR) -name '*.s')
+ASOURCES=$(shell find -L $(SRCDIR) -name '*.S')
 CSOURCES=$(shell find -L $(SRCDIR) -name '*.c')
 CXXSOURCES=$(shell find -L $(SRCDIR) -name '*.cpp')
 
 # create object file paths in the outdir
-OBJECTS=$(ASOURCES:%.s=$(OUTDIR)/%.o)
+OBJECTS=$(CXXSOURCES:%.cpp=$(OUTDIR)/%.o)
+OBJECTS+=$(ASOURCES:%.S=$(OUTDIR)/%.o)
 OBJECTS+=$(CSOURCES:%.c=$(OUTDIR)/%.o)
-OBJECTS+=$(CXXSOURCES:%.cpp=$(OUTDIR)/%.o)
 
 # create out dirs to make
 OUT_DIRS=$(subst /,/,$(sort $(dir $(OBJECTS))))
+
+LINK_LIBS=./system/lib/libstm32plus-debug-f030-8000000i.a
 
 #######################################################################
 #                        Compile/Linker Flags                         #
 #######################################################################
 
-DEFS=-DSTM32F030x8
+DEFS=-DSTM32PLUS_F0_30 -DHSI_VALUE=8000000
 MCFLAGS=-mcpu=cortex-m0 -mthumb
 BASE_FLAGS=$(MCFLAGS) $(DEFS) $(INCLUDES)
-BASE_FLAGS+=-fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra -gdwarf-2 -c -MMD -MP -MF$(@:.o=.d) -MT$(@)
-CFLAGS= $(BASE_FLAGS) -std=gnu11
-CXXFLAGS=$(BASE_FLAGS) -std=c++11 -pedantic-errors -fno-rtti -fno-threadsafe-statics
-LDSCRIPT=-T ./ldscripts/mem.ld -T ./ldscripts/libs.ld -T ./ldscripts/sections.ld -nostartfiles -Wl,-Map=$(OUTDIR)/output.map -Wl,-gc-sections --specs=nano.specs 
-LDFLAGS=$(LDSCRIPT) $(MCFLAGS) $(INCLUDES_LIBS) $(LINK_LIBS)
+BASE_FLAGS+=-fno-exceptions -ffunction-sections -fdata-sections -Wall -gdwarf-2 -c
+CFLAGS= $(BASE_FLAGS)
+CXXFLAGS=$(BASE_FLAGS) -std=gnu++11 -fno-rtti -fno-threadsafe-statics -Wextra -I./system/include/stl -I./system/lib
+LDSCRIPT=-T ./system/ldscripts/Linker.ld -gdwarf-2 -Wl,-Map=$(OUTDIR)/output.map -Wl,-gc-sections -Wl,-wrap,__aeabi_unwind_cpp_pr0 -Wl,-wrap,__aeabi_unwind_cpp_pr1 -Wl,-wrap,__aeabi_unwind_cpp_pr2 
+LDFLAGS=-Xlinker $(LDSCRIPT) $(MCFLAGS) $(INCLUDES_LIBS)
 
 #######################################################################
 #                             Build Rules                             #
@@ -96,6 +99,7 @@ debug-no-opt: CXXFLAGS+=-O0 -g3
 debug-no-opt: LDFLAGS+=-g0
 debug-no-opt: release
 
+release: $(OUTDIR)/$(LISTING)
 release: $(OUTDIR)/$(BINHEX)
 release: $(OUTDIR)/$(BINARY)
 
@@ -107,8 +111,12 @@ $(OUTDIR)/$(BINHEX): $(OUTDIR)/$(BINELF)
 	$(CP) -O ihex $< $@
 	@echo "Objcopy from ELF to IHEX complete!\n"
 
+$(OUTDIR)/$(LISTING): $(OUTDIR)/$(BINELF)
+	$(OD) -D -S $< > $(OUTDIR)/$(LISTING)
+	@echo "Objdump from ELF to listing complete!\n"
+
 $(OUTDIR)/$(BINELF): $(OBJECTS)
-	$(CC) $(OBJECTS) $(LDFLAGS) -lm -o $@
+	$(CXX) -o $@ $(LDFLAGS) $(OBJECTS) $(LINK_LIBS)
 	@echo "Linking complete!\n"
 	$(SIZE) $(OUTDIR)/$(BINELF)
 
@@ -120,7 +128,7 @@ $(OUTDIR)/%.o: %.c
 	$(CC) $(CFLAGS) $< -o $@
 	@echo "Compiled "$<"!\n"
 
-$(OUTDIR)/%.o: %.s
+$(OUTDIR)/%.o: %.S
 	$(CC) $(CFLAGS) $< -o $@
 	@echo "Assambled "$<"!\n"
 

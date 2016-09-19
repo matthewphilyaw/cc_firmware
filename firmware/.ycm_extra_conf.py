@@ -36,22 +36,24 @@ import ycm_core
 # CHANGE THIS LIST OF FLAGS. YES, THIS IS THE DROID YOU HAVE BEEN LOOKING FOR.
 flags = [
 '-Wall',
-'-DDEBUG',
-'-DTRACE',
-'-DOS_USE_TRACE_SEMIHOSTING_DEBUG',
-'-DSTM32F030x8',
+'-fno-exceptions',
+'-ffunction-sections',
+'-fdata-sections',
+'-pedantic-errors',
+'-fno-rtti',
+'-fno-threadsafe-statics',
+'-DSTM32PLUS_F0_30',
+'-DHSI_VALUE=8000000',
 '-mpcu', 'cortex-m0',
 '-mthumb',
-'-nostartfiles',
-'-std=gnu11',
+'-std=gnu++0x',
 '-x',
 'c++',
 '-undef', # get rid of standard definitions to allow us to include arm math header
 '-I', '/usr/local/gcc-arm-none-eabi-5_2-2015q4/arm-none-eabi/include',
 '-I', './include',
 '-I', './system/include',
-'-I', './system/include/cmsis',
-'-I', './system/include/cmsis/device',
+'-I', './system/include/stl',
 ]
 
 
