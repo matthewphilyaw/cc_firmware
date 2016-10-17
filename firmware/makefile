@@ -53,7 +53,8 @@ OBJECTS+=$(CSOURCES:%.c=$(OUTDIR)/%.o)
 # create out dirs to make
 OUT_DIRS=$(subst /,/,$(sort $(dir $(OBJECTS))))
 
-LINK_LIBS=./system/lib/libstm32plus-debug-f030-8000000i.a
+#LINK_LIBS=./system/lib/libstm32plus-debug-f030-8000000i.a
+LINK_LIBS=./system/lib/libstm32plus-small-f030-8000000i.a
 
 #######################################################################
 #                        Compile/Linker Flags                         #
@@ -72,7 +73,7 @@ LDFLAGS=-Xlinker $(LDSCRIPT) $(MCFLAGS) $(INCLUDES_LIBS)
 #                             Build Rules                             #
 #######################################################################
 
-.PHONY: all mkbin release release-memopt debug debug-no-opt clean
+.PHONY: all program release release-memopt debug debug-no-opt clean
 
 #defulat to debug
 all: dirs debug
@@ -82,10 +83,18 @@ dirs: $(OUT_DIRS)
 $(OUT_DIRS):
 	$(MKDIR_P) $(OUT_DIRS)
 
+program:
+	cp $(OUTDIR)/$(BINARY) /Volumes/NUCLEO
+
 release-memopt: CFLAGS+=-O2
 release-memopt: CXXFLAGS+=-O2
 release-memopt: LDFLAGS+=-O2
 release-memopt: release
+
+release-small: CFLAGS+=-Os
+release-small: CXXFLAGS+=-Os
+release-small: LDFLAGS+=-Os
+release-small: release
 
 debug: DEFS+=-DDEBUG
 debug: CFLAGS+=-Og -g3
