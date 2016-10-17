@@ -30,6 +30,23 @@ static const char *help_text[] {
   "l1 1|0 - turns l1 on (1) or off(0)\r",
 };
 
+#define NUM_CMDS 5
+#define CMD_PRINT     0
+#define CMD_HELP_Q    1
+#define CMD_HELP      2
+#define CMD_CLEAR     3
+#define CMD_LED_ON    4
+#define CMD_LED_OFF   5
+
+static const uint8_t cmds[][20] {
+  {'p'},
+  {'?'},
+  {'h'},
+  {'c'},
+  {'l', '1', ' ', '1'},
+  {'l', '1', ' ', '0'},
+};
+
 namespace CentralCommand {
   Terminal::Terminal(uint32_t baudrate, const GpioPinRef &ledRef):
     usart(baudrate),
@@ -37,7 +54,12 @@ namespace CentralCommand {
     current_state(TerminalState::PRINT_INFO),
     next_state(TerminalState::INVALID_COMMAND)
   {
-    //empty
+
+  }
+
+  void Terminal::reset_cmd_buff() {
+    this->cmd_index = 0;
+    memset(this->cmd_buffer, 0, CMD_LEN);
   }
 
   void Terminal::initialise() {
@@ -48,6 +70,8 @@ namespace CentralCommand {
     );
 
     usart.enableInterrupts(Usart2InterruptFeature::RECEIVE);
+
+    reset_cmd_buff();
   }
 
   void Terminal::run() {
@@ -94,7 +118,6 @@ namespace CentralCommand {
     }
 
     current_state = Terminal::PARSE_COMMAND;
-    next_state = Terminal::INVALID_COMMAND;
   }
 
   void Terminal::clear_screen() {
@@ -136,57 +159,61 @@ namespace CentralCommand {
 
     usart.send(data);
 
-
-    if (data == 'p') {
-      next_state = Terminal::PRINT_INFO;
-    }
-    else if (data == '?' || data == 'h') {
-      next_state = Terminal::PRINT_HELP;
-    }
-    else if (data == 'c') {
-      next_state = Terminal::CLEAR_SCREEN;
-    }
-    else if (data == 'l') {
-      while(!buffer.read(&data));
-      usart.send(data);
-
-      if (data == '1') {
-        while(!buffer.read(&data));
-        usart.send(data);
-
-        if (data == ' ') {
-          while(!buffer.read(&data));
-          usart.send(data);
-
-          if (data == '1') {
-            next_state = Terminal::LED_ON;
-          }
-          else if (data == '0') {
-            next_state = Terminal::LED_OFF;
-          }
-          else {
-            next_state = Terminal::INVALID_COMMAND;
-          }
-        }
-        else {
-          next_state = Terminal::INVALID_COMMAND;
-        }
-      }
-      else {
-        next_state = Terminal::INVALID_COMMAND;
-      }
-    } 
-    else if (data == '\r') {
-      current_state = next_state;
+    // Can't exceed command buffer length
+    if (data != '\r' && this->cmd_index >= CMD_LEN) {
+      reset_cmd_buff();
+      current_state = Terminal::INVALID_COMMAND;
       return;
     }
-    else {
-      next_state = Terminal::INVALID_COMMAND;
+
+    // Read till new line (or max length above)
+    // State continues as is
+    if (data != '\r') {
+      this->cmd_buffer[this->cmd_index] = data;
+      this->cmd_index++;
+      return;
     }
 
-    if (data == '\r') {
-      current_state = next_state;
+    // If we are here then we have a new line a and potential command
+    // cmd_index will be plus one the actual index
+    if (this->cmd_index == 1) {
+      if (memcmp(this->cmd_buffer, cmds[CMD_PRINT], 1) == 0) {
+        reset_cmd_buff();
+        current_state = Terminal::PRINT_INFO;
+        return;
+      }
+
+      if (memcmp(this->cmd_buffer, cmds[CMD_CLEAR], 1) == 0) {
+        reset_cmd_buff();
+        current_state = Terminal::CLEAR_SCREEN;
+        return;
+      }
+
+      if ((memcmp(this->cmd_buffer, cmds[CMD_HELP], 1) == 0) ||
+          (memcmp(this->cmd_buffer, cmds[CMD_HELP_Q], 1) == 0)) {
+        reset_cmd_buff();
+        current_state = Terminal::PRINT_HELP;
+        return;
+      }
     }
+
+    if (this->cmd_index == 4) {
+      if (memcmp(this->cmd_buffer, cmds[CMD_LED_ON], 4) == 0) {
+        reset_cmd_buff();
+        current_state = Terminal::LED_ON;
+        return;
+      }
+
+      if (memcmp(this->cmd_buffer, cmds[CMD_LED_OFF], 4) == 0) {
+        reset_cmd_buff();
+        current_state = Terminal::LED_OFF;
+        return;
+      }
+    }
+
+    reset_cmd_buff();
+    current_state = Terminal::INVALID_COMMAND;
+    return;
   }
 
   void Terminal::on_interrupt(UsartEventType e) {

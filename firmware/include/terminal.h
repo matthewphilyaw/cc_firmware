@@ -14,12 +14,17 @@
 
 using namespace stm32plus;
 
+#define CMD_LEN 20
+
 namespace CentralCommand {
   class Terminal {
     private:
       Usart2<Usart2InterruptFeature> usart;
       GpioPinRef led;
       RingBuffer<uint8_t, 500> buffer;
+
+      uint8_t cmd_index = 0;
+      uint8_t cmd_buffer[CMD_LEN];
 
       void led_on();
       void led_off();
@@ -30,6 +35,7 @@ namespace CentralCommand {
       void parse_command();
       void ok();
       void invalid_command();
+      void reset_cmd_buff();
 
       enum TerminalState {
         LED_ON,
